@@ -1,0 +1,61 @@
+{
+  "name": "dsh-screencapture",
+  "version": "1.0.0",
+  "description": "WeChat-style screenshot for the DSH chat window: configurable shortcut, region selection, window snapping, annotations, clipboard copy and PNG save. Windows only.",
+  "icon": "icon.svg",
+  "type": "module",
+  "main": "host/index.js",
+  "license": "MIT",
+  "author": "joe",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/windsor8890/dsh-screencapture.git"
+  },
+  "homepage": "https://github.com/windsor8890/dsh-screencapture#readme",
+  "bugs": {
+    "url": "https://github.com/windsor8890/dsh-screencapture/issues"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "screenshot",
+    "annotation",
+    "wechat",
+    "windows",
+    "plugin",
+    "bundle"
+  ],
+  "exports": {
+    ".": "./host/index.js",
+    "./client": "./lib/client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "host",
+    "lib",
+    "src",
+    "tests",
+    "locale/*.json",
+    "cordis.patch.yml",
+    "icon.svg",
+    "build.mjs",
+    "README.md",
+    "README.en.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-settings"
+      ]
+    }
+  }
+}

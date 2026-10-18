@@ -1,0 +1,8 @@
+# dsh-screencapture bundle patch: one plugin row mounts both halves.
+# The host half registers /api/dsh-screencapture/* on the web server (native Windows
+# screen capture + clipboard through a warm PowerShell helper); the browser half
+# (`./client`, served through `dsh.client`) renders the overlay, the composer
+# trigger and the settings page.
+- insert:
+    - id: dsh-screencapture
+      name: 'dsh-screencapture'

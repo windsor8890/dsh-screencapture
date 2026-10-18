@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# logs and temp files
+*.log
+*.tmp
+tmp/
+tools/tmp/
+
+# editor / OS junk
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# local test output
+tests/.tmp/
+coverage/

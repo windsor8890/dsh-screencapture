@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Screenshot">
+  <defs>
+    <linearGradient id="dsh-shot-bg" x1="8" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2f86c9"/>
+      <stop offset="1" stop-color="#14527f"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#dsh-shot-bg)"/>
+  <!-- selection frame corners -->
+  <g fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 26v-8h8"/>
+    <path d="M46 26v-8h-8"/>
+    <path d="M18 38v8h8"/>
+    <path d="M46 38v8h-8"/>
+    <!-- dashed selection edge, motif of a drag box -->
+    <path d="M26 18h12" stroke-dasharray="3 5" opacity="0.75"/>
+    <path d="M26 46h12" stroke-dasharray="3 5" opacity="0.75"/>
+  </g>
+  <!-- shutter/lens: the captured picture -->
+  <circle cx="32" cy="32" r="8.5" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <circle cx="32" cy="32" r="3" fill="#ffffff"/>
+  <circle cx="41.5" cy="22.5" r="2.2" fill="#ffd166"/>
+</svg>
