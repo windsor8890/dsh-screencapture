@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  client:
+    name: Build & client tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: ""
+      - name: Rebuild the browser bundle
+        run: node build.mjs
+      - name: Check that the committed bundle is current
+        run: git diff --exit-code -- lib/client.js
+      - name: Syntax-check the bundle
+        run: node --check lib/client.js
+      - name: Client geometry / selection tests
+        run: node tests/client-math-test.mjs
+      - name: Locale dictionary parity tests
+        run: node tests/client-locale-test.mjs
+
+  # The host test suites (tests/host-test.mjs and tests/hotkey-test.mjs) drive a
+  # real Windows desktop: native screen capture, the system clipboard, real
+  # RegisterHotKey probes and temporary top-level windows. They need an
+  # interactive Windows session, so they are documented in CONTRIBUTING.md and
+  # run locally instead of on GitHub-hosted runners.

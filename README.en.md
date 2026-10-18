@@ -9,6 +9,7 @@
 
 <p align="center">
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
+  <a href="https://github.com/windsor8890/dsh-screencapture/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/windsor8890/dsh-screencapture/actions/workflows/ci.yml/badge.svg"></a>
   <img alt="Platform: Windows" src="https://img.shields.io/badge/platform-Windows%2010%2F11-0078D6.svg">
   <img alt="DSH plugin" src="https://img.shields.io/badge/DSH-plugin-4B8BBE.svg">
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-green.svg">
@@ -23,6 +24,14 @@ copy to the clipboard (or save as PNG). The whole interaction renders inside DSH
 paste the result into the composer with `Ctrl + V` right away.
 
 > Community plugin; not affiliated with Tencent / WeChat. "WeChat-style" only describes the UX.
+
+## Screenshots
+
+Both images were generated with a neutral demo scene — no real user desktop content:
+
+| Region select &amp; annotations | Window snapping |
+|---|---|
+| ![region selection](docs/screenshots/overlay-selection.png) | ![window snapping](docs/screenshots/window-snap-hover.png) |
 
 ## Features
 
@@ -179,7 +188,11 @@ DSH.
 # Build the browser half (concatenates src/client/*.js into lib/client.js)
 node build.mjs
 
-# Host tests: real desktop capture, cross-process clipboard readback, save, route validation (17)
+# Cross-platform client tests (also run by CI): geometry/chords + locale parity
+node tests/client-math-test.mjs
+node tests/client-locale-test.mjs
+
+# Host tests (Windows, interactive desktop): real desktop capture, clipboard readback, save, routes (17)
 node tests/host-test.mjs
 
 # Global hotkey / SSE / config / overlay-window tests (20; briefly registers F12 probes)
@@ -219,8 +232,12 @@ dsh-screencapture/
 Issues and PRs are welcome:
 
 1. Fork the repo and create a branch;
-2. Run `node build.mjs` and both test suites after your changes;
+2. Run `node build.mjs` and the relevant tests (client tests are cross-platform; the two host suites
+   need an interactive Windows desktop);
 3. Open a PR with the motivation, the change and the verification you ran.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow. For security issues, follow
+[SECURITY.md](SECURITY.md) and report privately — please do not open a public issue.
 
 ## License
 

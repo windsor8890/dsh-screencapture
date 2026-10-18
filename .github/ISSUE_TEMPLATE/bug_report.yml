@@ -1,0 +1,55 @@
+name: Bug report
+description: Something is broken in the plugin
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. `dsh-screencapture` is a **Windows-only** plugin (Windows 10/11
+        with DSH Desktop). Please fill in the sections below so the issue can be reproduced.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Press Ctrl+Shift+S
+        2. Drag a selection
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: |
+        - Windows version (e.g. Windows 11 23H2):
+        - DSH version (e.g. DSH Desktop 0.2.1-rc.2):
+        - Plugin version (from 设置 → 插件):
+        - Shortcut / global hotkey enabled:
+        - Multi-monitor setup (if relevant):
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / screenshots (optional)
+      description: Screenshots of the overlay or the settings page, or the error code from the toast, help a lot.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I am running Windows 10/11 with DSH Desktop (or another runtime that can run the host half).
+          required: true
+        - label: I searched existing issues for the same problem.
+          required: true

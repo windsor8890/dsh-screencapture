@@ -9,6 +9,7 @@
 
 <p align="center">
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
+  <a href="https://github.com/windsor8890/dsh-screencapture/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/windsor8890/dsh-screencapture/actions/workflows/ci.yml/badge.svg"></a>
   <img alt="Platform: Windows" src="https://img.shields.io/badge/platform-Windows%2010%2F11-0078D6.svg">
   <img alt="DSH plugin" src="https://img.shields.io/badge/DSH-plugin-4B8BBE.svg">
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-green.svg">
@@ -22,6 +23,14 @@
 整个交互都渲染在 DSH 窗口内部，截图完成后直接在输入框 `Ctrl + V` 粘贴发送。
 
 > 本项目是社区插件，与腾讯 / 微信官方无关；「微信截图」仅指交互风格。
+
+## 界面预览
+
+以下截图使用中性演示窗口生成，不包含任何真实用户桌面内容：
+
+| 框选与标注 | 窗口吸附 |
+|---|---|
+| ![框选与标注](docs/screenshots/overlay-selection.png) | ![窗口吸附](docs/screenshots/window-snap-hover.png) |
 
 ## 功能特性
 
@@ -157,7 +166,11 @@ Host 半（`host/`）修改后，在 设置 → 插件 中关闭再启用该插�
 # 构建浏览器半（把 src/client/*.js 拼成 lib/client.js）
 node build.mjs
 
-# Host 半测试：真实桌面截屏、剪贴板跨进程回读、保存、路由校验（17 项）
+# 跨平台客户端测试（CI 会跑）：几何/坐标/按键映射 + 中英字典对齐
+node tests/client-math-test.mjs
+node tests/client-locale-test.mjs
+
+# Host 半测试（Windows 交互式桌面）：真实截屏、剪贴板跨进程回读、保存、路由校验（17 项）
 node tests/host-test.mjs
 
 # 全局热键 / SSE / config / overlay-window 测试（20 项，会短暂注册 F12 探针）
@@ -196,8 +209,11 @@ dsh-screencapture/
 欢迎 Issue 与 PR：
 
 1. Fork 并新建分支；
-2. 修改后运行 `node build.mjs` 与两套测试；
+2. 修改后运行 `node build.mjs` 与相关测试（客户端测试跨平台，Host 两套需 Windows 交互式桌面）；
 3. 提交 PR，说明动机、改动与验证结果。
+
+详细流程见 [CONTRIBUTING.md](CONTRIBUTING.md)；安全问题请按 [SECURITY.md](SECURITY.md) 私下报告，
+不要开公开 Issue。
 
 ## License
 
