@@ -27,9 +27,6 @@ paste the result into the composer with `Ctrl + V` right away.
 
 ## Screenshots
 
-These are **real desktop** captures (with the full DSH interface); the personal-information and
-usage area at the bottom-left is pixelated:
-
 | Region select &amp; annotations | Window snapping |
 |---|---|
 | ![region selection](docs/screenshots/overlay-selection.png) | ![window snapping](docs/screenshots/window-snap-hover.png) |

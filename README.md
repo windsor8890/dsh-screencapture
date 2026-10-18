@@ -26,8 +26,6 @@
 
 ## 界面预览
 
-以下截图来自**真实桌面**（含完整 DSH 界面），左下角个人信息与用量区域已做像素化处理：
-
 | 框选与标注 | 窗口吸附 |
 |---|---|
 | ![框选与标注](docs/screenshots/overlay-selection.png) | ![窗口吸附](docs/screenshots/window-snap-hover.png) |
