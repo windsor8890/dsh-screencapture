@@ -27,7 +27,8 @@ paste the result into the composer with `Ctrl + V` right away.
 
 ## Screenshots
 
-Both images were generated with a neutral demo scene — no real user desktop content:
+These are **real desktop** captures (with the full DSH interface); the personal-information and
+usage area at the bottom-left is pixelated:
 
 | Region select &amp; annotations | Window snapping |
 |---|---|
