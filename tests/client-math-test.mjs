@@ -63,6 +63,12 @@ check('image origin -> display offset', helpers.shotImageToDisplay(fitBox, 0, 0)
 const roundTrip = helpers.shotDisplayToImage(fitBox, 250, 375)
 check('round trip', [near(roundTrip.x, 500), near(roundTrip.y, 250)], [true, true])
 
+// 2b. window-crop fit: the maximized window's region maps 1:1 (no letterbox)
+const fitCrop = helpers.shotFitImage({ width: 1000, height: 500 }, 600, 400, { x: 100, y: 50, width: 600, height: 400 })
+check('crop fit is 1:1', [near(fitCrop.scale, 1), near(fitCrop.offsetX, -100), near(fitCrop.offsetY, -50)], [true, true, true])
+check('crop display origin -> image origin', helpers.shotDisplayToImage(fitCrop, 0, 0), { x: 100, y: 50 })
+check('crop image origin -> display origin', helpers.shotImageToDisplay(fitCrop, 100, 50), { x: 0, y: 0 })
+
 // 3. drag rect in any direction, clamped to image bounds
 check('rect reverse drag', helpers.shotRectFromPoints({ x: 300, y: 400 }, { x: 100, y: 150 }, 2000, 1000), { x: 100, y: 150, w: 200, h: 250 })
 check('rect clamped', helpers.shotRectFromPoints({ x: -50, y: -20 }, { x: 2200, y: 1200 }, 2000, 1000), { x: 0, y: 0, w: 2000, h: 1000 })

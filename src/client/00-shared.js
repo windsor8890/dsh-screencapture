@@ -385,6 +385,56 @@ function shotRestoreOverlayWindow() {
   })
 }
 
+/** Wait until the (maximized) window layout has reached the renderer. */
+function shotNextLayoutFrame() {
+  return new Promise(function (resolve) {
+    if (typeof window.requestAnimationFrame !== 'function') {
+      window.setTimeout(resolve, 48)
+      return
+    }
+    window.requestAnimationFrame(function () {
+      window.requestAnimationFrame(function () { resolve() })
+    })
+  })
+}
+
+/**
+ * The part of the captured desktop that the (maximized) DSH window covers, in
+ * image pixels. The overlay maps this crop 1:1 onto its viewport so a 1000px
+ * drag selects exactly 1000 image pixels and the frozen frame fills the window
+ * (the old whole-desktop contain-fit letterboxed by 42px per side and made
+ * selections map to 1.034x image pixels on the maximized window).
+ * @returns {Promise<{x:number,y:number,width:number,height:number}|null>}
+ */
+async function shotMeasureWindowCrop(image, virtual) {
+  if (image === null || typeof image !== 'object' || !(image.width > 0) || !(image.height > 0)) return null
+  if (virtual === null || typeof virtual !== 'object' || !(virtual.width > 0) || !(virtual.height > 0)) return null
+  await shotNextLayoutFrame()
+  const viewportWidth = window.innerWidth
+  const viewportHeight = window.innerHeight
+  if (!(viewportWidth > 0) || !(viewportHeight > 0)) return null
+  const dpr = window.devicePixelRatio || 1
+  const outerWidth = window.outerWidth || viewportWidth
+  const outerHeight = window.outerHeight || viewportHeight
+  const frameX = Math.max(0, (outerWidth - viewportWidth) / 2)
+  const frameY = Math.max(0, (outerHeight - viewportHeight) / 2)
+  const screenX = typeof window.screenX === 'number' ? window.screenX : window.screenLeft
+  const screenY = typeof window.screenY === 'number' ? window.screenY : window.screenTop
+  if (typeof screenX !== 'number' || typeof screenY !== 'number') return null
+  const scaleX = image.width / virtual.width
+  const scaleY = image.height / virtual.height
+  const left = (screenX + frameX) * dpr - virtual.x
+  const top = (screenY + frameY) * dpr - virtual.y
+  const x = Math.round(shotClamp(left * scaleX, 0, image.width - 1))
+  const y = Math.round(shotClamp(top * scaleY, 0, image.height - 1))
+  return {
+    x,
+    y,
+    width: Math.max(1, Math.round(shotClamp(viewportWidth * dpr * scaleX, 1, image.width - x))),
+    height: Math.max(1, Math.round(shotClamp(viewportHeight * dpr * scaleY, 1, image.height - y))),
+  }
+}
+
 /** Trigger one capture; ignored while a capture/overlay is already running. */
 async function shotStartCapture(t) {
   if (shotOverlayState.phase === 'capturing' || shotOverlayState.phase === 'ready') return
@@ -392,12 +442,15 @@ async function shotStartCapture(t) {
   try {
     const payload = await shotHostJson('/capture', {}, 30000)
     await shotPrepareOverlayWindow()
+    const virtual = payload.virtual !== null && typeof payload.virtual === 'object' ? payload.virtual : null
+    const crop = await shotMeasureWindowCrop(payload.image, virtual)
+    if (crop !== null) payload.image.crop = crop
     shotSetOverlay({
       phase: 'ready',
       shot: payload.image,
       screens: Array.isArray(payload.screens) ? payload.screens : [],
       windows: Array.isArray(payload.windows) ? payload.windows : [],
-      virtual: payload.virtual !== null && typeof payload.virtual === 'object' ? payload.virtual : null,
+      virtual,
       error: null,
     })
   } catch (error) {
@@ -526,12 +579,15 @@ async function shotLoadLastCapture(t) {
   try {
     const payload = await shotHostJson('/last-capture', undefined, 15000)
     await shotPrepareOverlayWindow()
+    const virtual = payload.virtual !== null && typeof payload.virtual === 'object' ? payload.virtual : null
+    const crop = await shotMeasureWindowCrop(payload.image, virtual)
+    if (crop !== null) payload.image.crop = crop
     shotSetOverlay({
       phase: 'ready',
       shot: payload.image,
       screens: Array.isArray(payload.screens) ? payload.screens : [],
       windows: Array.isArray(payload.windows) ? payload.windows : [],
-      virtual: payload.virtual !== null && typeof payload.virtual === 'object' ? payload.virtual : null,
+      virtual,
       error: null,
     })
   } catch (error) {
@@ -556,12 +612,15 @@ async function shotCatchUpLastCapture(t) {
     shotLastHandledSeq = payload.seq
     if (!fresh) return
     await shotPrepareOverlayWindow()
+    const virtual = payload.virtual !== null && typeof payload.virtual === 'object' ? payload.virtual : null
+    const crop = await shotMeasureWindowCrop(payload.image, virtual)
+    if (crop !== null) payload.image.crop = crop
     shotSetOverlay({
       phase: 'ready',
       shot: payload.image,
       screens: Array.isArray(payload.screens) ? payload.screens : [],
       windows: Array.isArray(payload.windows) ? payload.windows : [],
-      virtual: payload.virtual !== null && typeof payload.virtual === 'object' ? payload.virtual : null,
+      virtual,
       error: null,
     })
   } catch (error) {

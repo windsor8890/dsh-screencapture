@@ -21,9 +21,21 @@ const SHOT_HANDLE_HIT = 9
 /* geometry helpers                                                           */
 /* -------------------------------------------------------------------------- */
 
-function shotFitImage(shot, viewWidth, viewHeight) {  const imageWidth = Math.max(1, shot.width)
+/**
+ * Map image pixels onto the overlay viewport. `crop` (optional) is the part of
+ * the capture that the app window currently covers; drawing the full image with
+ * that crop translated onto the viewport gives an exact 1:1 mapping on the
+ * maximized window instead of the letterboxed/scaled whole-desktop preview
+ * (which made selections map to 1.034x image pixels and left black side bars).
+ */
+function shotFitImage(shot, viewWidth, viewHeight, crop) {
+  const imageWidth = Math.max(1, shot.width)
   const imageHeight = Math.max(1, shot.height)
-  const scale = Math.min(viewWidth / imageWidth, viewHeight / imageHeight)
+  const view = crop !== null && typeof crop === 'object'
+    && crop.width > 0 && crop.height > 0
+    ? crop
+    : { x: 0, y: 0, width: imageWidth, height: imageHeight }
+  const scale = Math.min(viewWidth / view.width, viewHeight / view.height)
   const displayWidth = imageWidth * scale
   const displayHeight = imageHeight * scale
   return {
@@ -32,8 +44,9 @@ function shotFitImage(shot, viewWidth, viewHeight) {  const imageWidth = Math.ma
     imageHeight,
     displayWidth,
     displayHeight,
-    offsetX: (viewWidth - displayWidth) / 2,
-    offsetY: (viewHeight - displayHeight) / 2,
+    offsetX: (viewWidth - view.width * scale) / 2 - view.x * scale,
+    offsetY: (viewHeight - view.height * scale) / 2 - view.y * scale,
+    crop: view,
   }
 }
 
@@ -326,7 +339,7 @@ function ScreenshotEditor(props) {
     setDraft(value)
   }
 
-  const fit = shotFitImage(shot, viewport.w, viewport.h)
+  const fit = shotFitImage(shot, viewport.w, viewport.h, shot.crop)
   const displayRect = selection === null ? null : shotImageRectToDisplay(fit, selection)
 
   /* ---- viewport + image ------------------------------------------------- */
