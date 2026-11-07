@@ -581,10 +581,14 @@ async function main() {
           assert.equal(typeof entry[key], 'number', `window.${key} is a number`)
         }
         assert.ok(entry.width > 1 && entry.height > 1, 'window is larger than 1x1')
+        // Real windows (for example a Qt-based WeChat window) can extend past
+        // the virtual screen; only the visible intersection is snap-able, so a
+        // non-empty overlap is the correct invariant — not containment.
+        const overlapsVirtual = entry.x < union.right && entry.y < union.bottom
+          && entry.x + entry.width > union.x && entry.y + entry.height > union.y
         assert.ok(
-          entry.x >= union.x - 16 && entry.y >= union.y - 16
-          && entry.x + entry.width <= union.right + 16 && entry.y + entry.height <= union.bottom + 16,
-          `window ${entry.hwnd} (${entry.title.slice(0, 40)}) lies within the virtual screen`,
+          overlapsVirtual,
+          `window ${entry.hwnd} (${entry.title.slice(0, 40)}) intersects the virtual screen`,
         )
       }
       state.windows = json.windows

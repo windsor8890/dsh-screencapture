@@ -1054,11 +1054,14 @@ async function main() {
           assert.equal(typeof entry[key], 'number', `window.${key} is a number`)
         }
         assert.ok(entry.width > 1 && entry.height > 1, 'window is larger than 1x1')
+        // Real windows can extend past the virtual screen (Qt/WeChat does);
+        // only the visible intersection is snap-able, so require an overlap.
+        const overlapsVirtual = entry.x < virtual.x + virtual.width
+          && entry.y < virtual.y + virtual.height
+          && entry.x + entry.width > virtual.x && entry.y + entry.height > virtual.y
         assert.ok(
-          entry.x >= virtual.x - 16 && entry.y >= virtual.y - 16
-          && entry.x + entry.width <= virtual.x + virtual.width + 16
-          && entry.y + entry.height <= virtual.y + virtual.height + 16,
-          `window ${entry.hwnd} lies within the virtual screen`,
+          overlapsVirtual,
+          `window ${entry.hwnd} intersects the virtual screen`,
         )
       }
       const indexA = result.windows.findIndex(entry => entry.hwnd === probeAHwnd)

@@ -63,7 +63,7 @@ paste the result into the composer with `Ctrl + V` right away.
 
 | Platform | Status |
 |---|---|
-| Windows 10 / 11 (DSH Desktop, Electron) | ✅ Fully supported (tested with DSH Desktop 0.2.1-rc.2) |
+| Windows 10 / 11 (DSH Desktop, Electron) | ✅ Fully supported (tested with DSH Desktop 0.2.2-rc.1, compatible with 0.2.1-rc.5) |
 | Windows, other DSH runtimes | ✅ Host half works (PowerShell 5.1 ships with Windows) |
 | macOS / Linux | ⚠️ Plugin shell loads, but capture / clipboard / global-hotkey routes return `unsupported-platform` |
 
@@ -171,8 +171,10 @@ DSH.
 - The default shortcut is `Ctrl + Shift + S`; if it is taken by DSH itself or another app (for
   example DSH's *Archive session* uses `Ctrl + Shift + A`, WeChat uses `Alt + A`), pick another
   chord or rely on the global hotkey.
-- The capture covers the whole virtual desktop (all monitors) and is displayed scaled inside DSH;
-  there is no mosaic / blur tool yet.
+- The capture is mapped **1:1** to the area the DSH window actually covers (the whole working area
+  when maximized, with the taskbar excluded); content on other monitors is outside that window and
+  would need a separate overlay-window design.
+- There is no mosaic / blur tool yet.
 - Window snapping captures the visible part of that window in the frozen frame; fully occluded
   regions are not reconstructed.
 - The overlay lives inside the DSH application window (the renderer cannot paint over other desktop
